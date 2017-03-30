@@ -25,23 +25,28 @@ with open('../results_csv/pkw2000.csv', newline='') as csvfile:
     reader = csv.DictReader(csvfile)
     previous = {'Województwo': '', 'Nr okręgu': '', 'Kod gminy': ''}
     for row in reader:
-        new_statsheet = copy(basic_statsheet)
-        for k in new_statsheet.keys():
-            new_statsheet[k] = int(row[k])
-        new_statsheet['Gmina'] = row['Gmina']
-        stats[row['Kod gminy']] = new_statsheet
+        if(not (row['Kod gminy'] in stats)):
+            new_statsheet = copy(basic_statsheet)
+            for k in new_statsheet.keys():
+                new_statsheet[k] = int(row[k])
+            new_statsheet['Gmina'] = row['Gmina']
+            stats[row['Kod gminy']] = new_statsheet
 
-        if (row['Województwo'] != previous['Województwo']):
-            stats[row['Województwo']] = copy(basic_statsheet)
-            children[row['Województwo']] = []
-            children['Polska'].append(row['Województwo'])
+            if (row['Województwo'] != previous['Województwo']):
+                stats[row['Województwo']] = copy(basic_statsheet)
+                children[row['Województwo']] = []
+                children['Polska'].append(row['Województwo'])
 
-        if (row['Nr okręgu'] != previous['Nr okręgu']):
-            stats[row['Nr okręgu']] = copy(basic_statsheet)
-            children[row['Nr okręgu']] = []
-            children[row['Województwo']].append(row['Nr okręgu'])
+            if (row['Nr okręgu'] != previous['Nr okręgu']):
+                stats[row['Nr okręgu']] = copy(basic_statsheet)
+                children[row['Nr okręgu']] = []
+                children[row['Województwo']].append(row['Nr okręgu'])
 
-        children[row['Nr okręgu']].append(row['Kod gminy'])
+            children[row['Nr okręgu']].append(row['Kod gminy'])
+        else:
+            for k in stats[row['Kod gminy']].keys():
+                if(k != 'Gmina'):
+                    stats[row['Kod gminy']][k] += int(row[k])
 
         previous = copy(row)
 
@@ -55,5 +60,3 @@ def calc_stats(area):
 
 calc_stats('Polska')
 
-print(children['Polska'])
-print(stats['Polska'])

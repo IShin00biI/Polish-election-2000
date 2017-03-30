@@ -1,3 +1,5 @@
+import csv
+from copy import copy
 
 candidates = ['Dariusz Maciej GRABOWSKI', 'Piotr IKONOWICZ', 'Jarosław KALINOWSKI',
               'Janusz KORWIN-MIKKE', 'Marian KRZAKLEWSKI', 'Aleksander KWAŚNIEWSKI',
@@ -9,8 +11,6 @@ stat_list = ['Obwody', 'Uprawnieni', 'Karty wydane', 'Głosy oddane', 'Głosy ni
 
 children = {'Polska': []}
 
-stats = {}
-
 basic_statsheet = {}
 
 for stat in stat_list:
@@ -19,8 +19,7 @@ for stat in stat_list:
 for cand in candidates:
     basic_statsheet[cand] = 0
 
-import csv
-from copy import copy
+stats = {'Polska': copy(basic_statsheet)}
 
 with open('../results_csv/pkw2000.csv', newline='') as csvfile:
     reader = csv.DictReader(csvfile)
@@ -45,3 +44,16 @@ with open('../results_csv/pkw2000.csv', newline='') as csvfile:
         children[row['Nr okręgu']].append(row['Kod gminy'])
 
         previous = copy(row)
+
+def calc_stats(area):
+    if(stats[area]['Obwody'] == 0):
+        for child in children[area]:
+            child_stats = calc_stats(child)
+            for k in stats[area].keys():
+                stats[area][k] += child_stats[k]
+    return stats[area]
+
+calc_stats('Polska')
+
+print(children['Polska'])
+print(stats['Polska'])

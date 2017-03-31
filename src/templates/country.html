@@ -14,13 +14,18 @@
     </header>
     <main>
         <header class="pageheader"> <h1>{{area}}</h1></header>
-        <div class="line_chart">
-            {% for cand in candidates %}
-                <div class="line_chart_elem"
-                     style="background-color: {{color[cand]}};
-                     width: {{(stats[area][cand] / stats[area]['Głosy ważne'] * 100) | round(2, 'common')}}%"></div>
-            {% endfor %}
-        </div>
+        <section>
+            <figure>
+            <figcaption>Rozkład głosów</figcaption>
+                <div class="line_chart">
+                {% for cand in candidates %}
+                    <div class="line_chart_elem"
+                        style="background-color: {{color[cand]}};
+                        width: {{(stats[area][cand] / stats[area]['Głosy ważne'] * 100) | round(2, 'common')}}%"></div>
+                {% endfor %}
+                </div>
+            </figure>
+        </section>
     <section class="flex_container">
         <table>
             <caption>

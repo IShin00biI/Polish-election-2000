@@ -1,0 +1,95 @@
+body {
+    margin: 0;
+    font-family: Arial, Verdana, sans-serif;
+}
+
+header.mainheader {
+    text-align: center;
+    background-color: crimson;
+    padding: 10px;
+    font-size: 3em;
+    font-weight: bold;
+}
+
+header.pageheader {
+    margin:20px;
+}
+
+main {
+    margin: 5%;
+
+    border: 1px solid pink;
+}
+
+table, td, th {
+    border: 1px solid black;
+}
+
+table {
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.cand_table {
+    max-width: 70%;
+}
+
+.centered {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+td, th {
+    padding: 5px;
+}
+
+section {
+    margin:20px;
+    border: 1px solid crimson;
+    padding:15px;
+}
+
+.flex_container {
+    display: flex;
+    justify-content: space-around;
+}
+
+.line_chart {
+    height: 30px;
+    margin: 20px;
+    padding: 0;
+    background-color: aquamarine;
+    display: flex;
+}
+
+.line_chart_elem {
+    margin: 0;
+    padding: 0;
+    height: 100%
+}
+
+#regions_div {
+    max-height: 90%;
+    max-width: 90%
+}
+
+@media all and (max-width: 900px) {
+    .large_only {
+        display: none;
+    }
+
+}
+
+@media all and (max-width: 700px) {
+    .flex_container {
+        flex-direction: column;
+        align-items: center;
+    }
+    .large_only {
+        display: none;
+    }
+    .not_small {
+        display: none;
+    }
+
+}

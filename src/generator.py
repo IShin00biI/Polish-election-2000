@@ -8,6 +8,10 @@ candidates = ['Dariusz Maciej GRABOWSKI', 'Piotr IKONOWICZ', 'Jarosław KALINOWS
 
 stat_list = ['Obwody', 'Uprawnieni', 'Karty wydane', 'Głosy oddane', 'Głosy nieważne', 'Głosy ważne']
 
+color = {'Dariusz Maciej GRABOWSKI': 'crimson', 'Piotr IKONOWICZ': 'blue', 'Jarosław KALINOWSKI': 'yellow',
+              'Janusz KORWIN-MIKKE': 'green', 'Marian KRZAKLEWSKI': 'purple', 'Aleksander KWAŚNIEWSKI': 'pink',
+              'Andrzej LEPPER': 'brown', 'Jan ŁOPUSZAŃSKI': 'darkcyan', 'Andrzej Marian OLECHOWSKI': 'blueviolet',
+              'Bogdan PAWŁOWSKI': 'greenyellow', 'Lech WAŁĘSA': 'fuchsia', 'Tadeusz Adam WILECKI': 'coral'}
 
 children = {'Polska': []}
 
@@ -60,3 +64,21 @@ def calc_stats(area):
 
 calc_stats('Polska')
 
+from jinja2 import Environment, PackageLoader, select_autoescape
+
+env = Environment(
+        loader=PackageLoader('src', 'templates'),
+        autoescape=select_autoescape(['html', 'xml'])
+    )
+
+template = env.get_template('country.html')
+
+with open('../website/index.html', 'w', encoding='UTF-8') as out:
+    out.write(template.render(
+        stat_list=stat_list,
+        candidates=candidates,
+        stats=stats,
+        color=color,
+        area='Polska',
+        children=children['Polska']
+    ))

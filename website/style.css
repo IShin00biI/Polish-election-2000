@@ -9,6 +9,7 @@ header.mainheader {
     padding: 10px;
     font-size: 3em;
     font-weight: bold;
+    color: white;
 }
 
 header.pageheader {
@@ -17,8 +18,7 @@ header.pageheader {
 
 main {
     margin: 5%;
-
-    border: 1px solid pink;
+    border: 1px solid black;
 }
 
 table, td, th {
@@ -28,10 +28,16 @@ table, td, th {
 table {
     border-collapse: collapse;
     margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 table caption {
     margin-bottom: 10px;
+    font-weight: bold;
+}
+
+figcaption {
+    font-weight: bold;
 }
 
 .cand_table {
@@ -49,7 +55,7 @@ td, th {
 
 section {
     margin:20px;
-    border: 1px solid crimson;
+    border: 1px solid black;
     padding:15px;
 }
 

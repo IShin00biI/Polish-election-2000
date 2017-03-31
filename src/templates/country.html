@@ -76,14 +76,14 @@
             <caption>Województwa</caption>
             <thead>
                 <tr>
-                    <th>Okrąg</th>
+                    <th>Województwo</th>
                     {% for stat in stat_list %}
                         {% if stat == 'Uprawnieni' or stat == 'Głosy ważne' %}
-                        <td class="not_small">
+                        <th class="not_small">
                         {% else %}
-                        <td class="large_only">
+                        <th class="large_only">
                         {% endif %}
-                        {{stat}}</td>
+                        {{stat}}</th>
                     {% endfor %}
                 </tr>
             </thead>
@@ -99,7 +99,7 @@
                         {% else %}
                         <td class="large_only">
                         {% endif %}
-                        {{stats[area][stat]}}</td>
+                        {{stats[subarea][stat]}}</td>
                     {% endfor %}
                 </tr>
             {% endfor %}

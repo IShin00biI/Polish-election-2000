@@ -3,9 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="author" content="Michał Naruniec">
-    <title>Gmina {{commune_name}} - PKW2000</title>
+    <link rel="stylesheet" type="text/css" href="../style.css">
+    <title>Gmina {{stats[area]['Gmina']}} - PKW2000</title>
 </head>
 <body>
-
+    <header class="mainheader">
+        Wybory prezydenckie 2000
+    </header>
+    <main>
+        <header class="pageheader"> <h1>Gmina {{stats[area]['Gmina']}} ({{area}})</h1></header>
+        <section>
+            <figure>
+            <figcaption>Rozkład głosów</figcaption>
+                <div class="line_chart">
+                {% for cand in candidates %}
+                    <div class="line_chart_elem"
+                        style="background-color: {{color[cand]}};
+                        width: {{(stats[area][cand] / stats[area]['Głosy ważne'] * 100) | round(2, 'common')}}%"></div>
+                {% endfor %}
+                </div>
+            </figure>
+        </section>
+    <section class="flex_container">
+        <table>
+            <caption>
+                Statystyki głosowania
+            </caption>
+            <thead>
+                <tr>
+                    <th>Statystyka</th>
+                    <th>Wartość</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for stat in stat_list %}
+                <tr>
+                    <td>{{stat}}</td>
+                    <td>{{stats[area][stat]}}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <table class="cand_table">
+            <caption>
+                Wyniki kandydatów
+            </caption>
+            <thead>
+                <tr>
+                    <th>Kandydat</th>
+                    <th>Kolor</th>
+                    <th class="large_only">Otrzymane głosy</th>
+                    <th>Procent</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for cand in candidates %}
+                <tr>
+                    <td>{{cand}}</td>
+                    <td style="background-color: {{color[cand]}}"></td>
+                    <td class="large_only">{{stats[area][cand]}}</td>
+                    <td>{{(stats[area][cand]/stats[area]['Głosy ważne'] * 100) | round(2, 'common')}}%</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </section>
+    </main>
 </body>
 </html>

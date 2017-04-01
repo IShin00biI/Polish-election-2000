@@ -1,17 +1,12 @@
+
 import csv
 from copy import copy
 
-candidates = ['Dariusz Maciej GRABOWSKI', 'Piotr IKONOWICZ', 'Jarosław KALINOWSKI',
-              'Janusz KORWIN-MIKKE', 'Marian KRZAKLEWSKI', 'Aleksander KWAŚNIEWSKI',
-              'Andrzej LEPPER', 'Jan ŁOPUSZAŃSKI', 'Andrzej Marian OLECHOWSKI',
-              'Bogdan PAWŁOWSKI', 'Lech WAŁĘSA', 'Tadeusz Adam WILECKI']
+candidates = ['Dariusz Maciej GRABOWSKI', 'Piotr IKONOWICZ', 'Jarosław KALINOWSKI', 'Janusz KORWIN-MIKKE', 'Marian KRZAKLEWSKI', 'Aleksander KWAŚNIEWSKI', 'Andrzej LEPPER', 'Jan ŁOPUSZAŃSKI', 'Andrzej Marian OLECHOWSKI', 'Bogdan PAWŁOWSKI', 'Lech WAŁĘSA', 'Tadeusz Adam WILECKI']
 
 stat_list = ['Obwody', 'Uprawnieni', 'Karty wydane', 'Głosy oddane', 'Głosy nieważne', 'Głosy ważne']
 
-color = {'Dariusz Maciej GRABOWSKI': 'crimson', 'Piotr IKONOWICZ': 'blue', 'Jarosław KALINOWSKI': 'yellow',
-              'Janusz KORWIN-MIKKE': 'green', 'Marian KRZAKLEWSKI': 'purple', 'Aleksander KWAŚNIEWSKI': 'pink',
-              'Andrzej LEPPER': 'brown', 'Jan ŁOPUSZAŃSKI': 'darkcyan', 'Andrzej Marian OLECHOWSKI': 'blueviolet',
-              'Bogdan PAWŁOWSKI': 'greenyellow', 'Lech WAŁĘSA': 'fuchsia', 'Tadeusz Adam WILECKI': 'coral'}
+color = {'Dariusz Maciej GRABOWSKI': 'crimson', 'Piotr IKONOWICZ': 'blue', 'Jarosław KALINOWSKI': 'yellow', 'Janusz KORWIN-MIKKE': 'green', 'Marian KRZAKLEWSKI': 'purple', 'Aleksander KWAŚNIEWSKI': 'pink', 'Andrzej LEPPER': 'brown', 'Jan ŁOPUSZAŃSKI': 'darkcyan', 'Andrzej Marian OLECHOWSKI': 'blueviolet', 'Bogdan PAWŁOWSKI': 'greenyellow', 'Lech WAŁĘSA': 'fuchsia', 'Tadeusz Adam WILECKI': 'coral'}
 
 children = {'Polska': []}
 
@@ -27,7 +22,7 @@ stats = {'Polska': copy(basic_statsheet)}
 
 type = {'Polska': 'country'}
 
-with open('../results_csv/pkw2000.csv', newline='') as csvfile:
+with open('./results_csv/pkw2000.csv', newline='') as csvfile:
     reader = csv.DictReader(csvfile)
     previous = {'Województwo': '', 'Nr okręgu': '', 'Kod gminy': ''}
     for row in reader:
@@ -70,7 +65,8 @@ def calc_stats(area):
 
 calc_stats('Polska')
 
-from jinja2 import Environment, PackageLoader, select_autoescape
+from jinja2 import Environment, PackageLoader
+from jinja2 import select_autoescape
 
 env = Environment(
         loader=PackageLoader('src', 'templates'),
@@ -79,7 +75,7 @@ env = Environment(
 
 template = env.get_template('country.html')
 
-with open('../website/index.html', 'w', encoding='UTF-8') as out:
+with open('./website/index.html', 'w', encoding='UTF-8') as out:
     out.write(template.render(
         stat_list=stat_list,
         candidates=candidates,
@@ -93,7 +89,7 @@ for cur_type in ['voivodeship', 'district', 'commune']:
     template = env.get_template(cur_type + '.html')
     for area in stats.keys():
         if(type[area] == cur_type):
-            with open('../website/' + cur_type + 's/' + area + '.html', 'w', encoding='UTF-8') as out:
+            with open('./website/' + cur_type + 's/' + area + '.html', 'w', encoding='UTF-8') as out:
                 out.write(template.render(
                     stat_list=stat_list,
                     candidates=candidates,

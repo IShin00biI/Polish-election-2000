@@ -9,7 +9,7 @@ function drawRegionsMap() {
           ['WARMIŃSKO-MAZURSKIE'],
           ['PODLASKIE'],
           ['KUJAWSKO-POMORSKIE'],
-          ['ZACHODNIO-POMORSKIE'],
+          ['ZACHODNIOPOMORSKIE'],
           ['MAŁOPOLSKIE'],
           ['WIELKOPOLSKIE'],
           ['OPOLSKIE'],

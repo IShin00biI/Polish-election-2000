@@ -18,8 +18,7 @@
             <figcaption>Rozkład głosów</figcaption>
                 <div class="line_chart">
                 {% for cand in candidates %}
-                    <div class="line_chart_elem"
-                        style="background-color: {{color[cand]}};
+                    <div style="background-color: {{color[cand]}};
                         width: {{(stats[area][cand] / stats[area]['Głosy ważne'] * 100) | round(2, 'common')}}%"></div>
                 {% endfor %}
                 </div>
@@ -90,7 +89,7 @@
             {% for subarea in children %}
                 <tr>
                     <td>
-                        <a href="../communes/{{subarea}}.html" alt="{{subarea}}"> {{subarea}} </a>
+                        <a href="../communes/{{subarea}}.html" title="{{subarea}}"> {{subarea}} </a>
                     </td>
                     <td>{{stats[subarea]['Gmina']}}</td>
                     {% for stat in stat_list %}

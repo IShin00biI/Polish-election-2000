@@ -4,20 +4,30 @@ from django.http import HttpResponse
 from .models import Voivodeship, District, Commune
 
 
-candidates = [
-    'grabowski'
-    'ikonowicz',
-    'kalinowski',
-    'korwin',
-    'krzaklewski',
-    'kwasniewski',
-    'lepper',
-    'lopuszanski',
-    'olechowski',
-    'pawlowski',
-    'walesa',
-    'wilecki'
-]
+candidates = {
+    'grabowski': 'crimson',
+    'ikonowicz': 'blue',
+    'kalinowski': 'yellow',
+    'korwin': 'green',
+    'krzaklewski': 'purple',
+    'kwasniewski': 'pink',
+    'lepper': 'brown',
+    'lopuszanski': 'darkcyan',
+    'olechowski': 'blueviolet',
+    'pawlowski': 'greenyellow',
+    'walesa': 'fuchsia',
+    'wilecki': 'coral'
+}
+
+
+statistics = {
+    'subareas': 'Obwody',
+    'people': 'Uprawnieni',
+    'cards': 'Karty wydane',
+    'given': 'Głosy oddane',
+    'valid': 'Głosy ważne',
+    'invalid': 'Głosy nieważne'
+}
 
 
 def login(request):
@@ -32,9 +42,9 @@ def index(request):
 
 
 def voivodeship(request, pk):
-    #return HttpResponse("Województwo")
     voivodeship = get_object_or_404(Voivodeship, pk=pk)
-    return render(request, 'main/voivodeship.html', {'area': voivodeship, 'candidates': candidates})
+    return render(request, 'main/voivodeship.html',
+                  {'area': voivodeship, 'candidates': candidates, 'statistics': statistics})
 
 
 def district(request, pk):

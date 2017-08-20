@@ -1,5 +1,6 @@
 {% load static %}
 {% load main_filters %}
+{%  load mathfilters %}
 
 <!DOCTYPE html>
 <html lang="pl">
@@ -16,13 +17,13 @@
     </header>
     <main>
     <header class="pageheader"> <h1>{{ area }}</h1></header>
-    <!--<section>
+    <section>
             <figure>
             <figcaption>Rozkład głosów</figcaption>
                 <div class="line_chart">
-                {% for cand in candidates %}
-                    <div style="background-color: kolor_kandydata;
-                        width: procent_kandydata%"></div>
+                {% for cand, color in candidates.items %}
+                    <div style="background-color: {{ color }};
+                        width: {{ area|getattr:cand|div:area.valid|mul:100 }}%"></div>
                 {% endfor %}
                 </div>
             </figure>
@@ -39,10 +40,10 @@
                 </tr>
             </thead>
             <tbody>
-            {% for stat in stat_list %}
+            {% for stat, verbose in statistics.items %}
                 <tr>
-                    <td>{{stat}}</td>
-                    <td>{{wartosc_statystyki}}</td>
+                    <td>{{ verbose }}</td>
+                    <td>{{ area|getattr:stat }}</td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -55,37 +56,36 @@
                 <tr>
                     <th>Kandydat</th>
                     <th>Kolor</th>
-                    <th class="large_only">Otrzymane głosy</th>
-                    <th>Procent</th>
+                    <th>Otrzymane głosy</th>
+                    <th class="large_only">Procent</th>
                 </tr>
             </thead>
             <tbody>
-            {% for cand in candidates %}
+            {% for cand, color in candidates.items %}
                 <tr>
-                    <td>{{cand}}</td>
-                    <td style="background-color: {{kolor_kandydata}}"></td>
-                    <td class="large_only">{{glosy_kandydata}}</td>
-                    <td>{{procent_kandydata}}%</td>
+                    <td>{{ cand }}</td>
+                    <td style="background-color: {{ color }}"></td>
+                    <td>{{ area|getattr:cand }}</td>
+                    <td class="large_only">{{ area|getattr:cand|div:area.valid|mul:100|floatformat:2 }}%</td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
     </section>
-    -->
     <section>
         <table class="centered">
             <caption>Okręgi</caption>
             <thead>
                 <tr>
                     <th>Okręg</th>
-                    <!--{% for stat in stat_list %}
-                        {% if stat == 'Uprawnieni' or stat == 'Głosy ważne' %}
+                    {% for stat, verbose in statistics.items %}
+                        {% if stat == 'people' or stat == 'valid' %}
                         <th class="not_small">
                         {% else %}
                         <th class="large_only">
                         {% endif %}
-                        {{stat}}</th>
-                    {% endfor %}-->
+                        {{ verbose }}</th>
+                    {% endfor %}
                     <th>Głosy ważne</th>
                 </tr>
             </thead>
@@ -95,15 +95,14 @@
                     <td>
                         <a href="{% url 'main:district' subarea.id %}" title="{{ subarea }}"> {{ subarea }} </a>
                     </td>
-                <!--
-                    {% for stat in stat_list %}
-                        {% if stat == 'Uprawnieni' or stat == 'Głosy ważne' %}
+                    {% for stat, verbose in statistics.items %}
+                        {% if stat == 'people' or stat == 'valid' %}
                         <td class="not_small">
                         {% else %}
                         <td class="large_only">
                         {% endif %}
-                        {{wartosc_statystyki}}</td>
-                    {% endfor %} -->
+                        {{ subarea|getattr:stat }}</td>
+                    {% endfor %}
                 <td>{{ area.cards }}</td>
                 </tr>
             {% endfor %}

@@ -1,19 +1,19 @@
 from django.db import models
 
-candidates = [
-    'grabowski',
-    'ikonowicz',
-    'kalinowski',
-    'korwin',
-    'krzaklewski',
-    'kwasniewski',
-    'lepper',
-    'lopuszanski',
-    'olechowski',
-    'pawlowski',
-    'walesa',
-    'wilecki'
-]
+candidates = {
+    'grabowski': 'crimson',
+    'ikonowicz': 'blue',
+    'kalinowski': 'yellow',
+    'korwin': 'green',
+    'krzaklewski': 'purple',
+    'kwasniewski': 'pink',
+    'lepper': 'brown',
+    'lopuszanski': 'darkcyan',
+    'olechowski': 'blueviolet',
+    'pawlowski': 'greenyellow',
+    'walesa': 'fuchsia',
+    'wilecki': 'coral'
+}
 
 
 class Area(models.Model):
@@ -49,6 +49,42 @@ class Area(models.Model):
 
     def given(self):
         return self.sum_attr("given")
+
+    def grabowski(self):
+        return self.sum_attr("grabowski")
+
+    def ikonowicz(self):
+        return self.sum_attr("ikonowicz")
+
+    def kalinowski(self):
+        return self.sum_attr("kalinowski")
+
+    def korwin(self):
+        return self.sum_attr("korwin")
+
+    def krzaklewski(self):
+        return self.sum_attr("krzaklewski")
+
+    def kwasniewski(self):
+        return self.sum_attr("kwasniewski")
+
+    def lepper(self):
+        return self.sum_attr("lepper")
+
+    def lopuszanski(self):
+        return self.sum_attr("lopuszanski")
+
+    def olechowski(self):
+        return self.sum_attr("olechowski")
+
+    def pawlowski(self):
+        return self.sum_attr("pawlowski")
+
+    def walesa(self):
+        return self.sum_attr("walesa")
+
+    def wilecki(self):
+        return self.sum_attr("wilecki")
 
 
 class Voivodeship(Area):

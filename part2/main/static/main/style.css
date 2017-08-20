@@ -73,7 +73,7 @@ section {
     display: flex;
 }
 
-.line chart > div {
+.line_chart > div {
     margin: 0;
     padding: 0;
     height: 100%

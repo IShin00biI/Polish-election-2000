@@ -1,0 +1,115 @@
+{% load static %}
+{% load main_filters %}
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Michał Naruniec">
+    <link rel="stylesheet" type="text/css" href="{% static 'main/style.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ area }} - PKW2000</title>
+</head>
+<body>
+    <header class="mainheader">
+        Wybory prezydenckie 2000
+    </header>
+    <main>
+    <header class="pageheader"> <h1>{{ area }}</h1></header>
+    <!--<section>
+            <figure>
+            <figcaption>Rozkład głosów</figcaption>
+                <div class="line_chart">
+                {% for cand in candidates %}
+                    <div style="background-color: kolor_kandydata;
+                        width: procent_kandydata%"></div>
+                {% endfor %}
+                </div>
+            </figure>
+        </section>
+    <section class="flex_container">
+        <table>
+            <caption>
+                Statystyki głosowania
+            </caption>
+            <thead>
+                <tr>
+                    <th>Statystyka</th>
+                    <th>Wartość</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for stat in stat_list %}
+                <tr>
+                    <td>{{stat}}</td>
+                    <td>{{wartosc_statystyki}}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <table class="cand_table">
+            <caption>
+                Wyniki kandydatów
+            </caption>
+            <thead>
+                <tr>
+                    <th>Kandydat</th>
+                    <th>Kolor</th>
+                    <th class="large_only">Otrzymane głosy</th>
+                    <th>Procent</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for cand in candidates %}
+                <tr>
+                    <td>{{cand}}</td>
+                    <td style="background-color: {{kolor_kandydata}}"></td>
+                    <td class="large_only">{{glosy_kandydata}}</td>
+                    <td>{{procent_kandydata}}%</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </section>
+    -->
+    <section>
+        <table class="centered">
+            <caption>Okręgi</caption>
+            <thead>
+                <tr>
+                    <th>Okręg</th>
+                    <!--{% for stat in stat_list %}
+                        {% if stat == 'Uprawnieni' or stat == 'Głosy ważne' %}
+                        <th class="not_small">
+                        {% else %}
+                        <th class="large_only">
+                        {% endif %}
+                        {{stat}}</th>
+                    {% endfor %}-->
+                    <th>Głosy ważne</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for subarea in area.children %}
+                <tr>
+                    <td>
+                        <a href="{% url 'main:district' subarea.id %}" title="{{ subarea }}"> {{ subarea }} </a>
+                    </td>
+                <!--
+                    {% for stat in stat_list %}
+                        {% if stat == 'Uprawnieni' or stat == 'Głosy ważne' %}
+                        <td class="not_small">
+                        {% else %}
+                        <td class="large_only">
+                        {% endif %}
+                        {{wartosc_statystyki}}</td>
+                    {% endfor %} -->
+                <td>{{ area.cards }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </section>
+    </main>
+</body>
+</html>

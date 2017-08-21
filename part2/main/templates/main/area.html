@@ -21,8 +21,8 @@
             <figure>
             <figcaption>Rozkład głosów</figcaption>
                 <div class="line_chart">
-                {% for cand, color in candidate_colors.items %}
-                    <div style="background-color: {{ color }};
+                {% for cand in candidates %}
+                    <div style="background-color: {{ candidate_colors|get:cand }};
                         width: {{ area|getattr:cand|div:area.valid|mul:100 }}%"></div>
                 {% endfor %}
                 </div>
@@ -40,9 +40,9 @@
                 </tr>
             </thead>
             <tbody>
-            {% for stat, name in stats.items %}
+            {% for stat in stats %}
                 <tr>
-                    <td>{{ name }}</td>
+                    <td>{{ stat_names|get:stat }}</td>
                     <td>{{ area|getattr:stat }}</td>
                 </tr>
             {% endfor %}
@@ -61,10 +61,10 @@
                 </tr>
             </thead>
             <tbody>
-            {% for cand, color in candidate_colors.items %}
+            {% for cand in candidates %}
                 <tr>
-                    <td>{{ cand }}</td>
-                    <td style="background-color: {{ color }}"></td>
+                    <td>{{ candidate_names|get:cand }}</td>
+                    <td style="background-color: {{ candidate_colors|get:cand }}"></td>
                     <td>{{ area|getattr:cand }}</td>
                     <td class="large_only">{{ area|getattr:cand|div:area.valid|mul:100|floatformat:2 }}%</td>
                 </tr>
@@ -72,30 +72,30 @@
             </tbody>
         </table>
     </section>
+    {% if area.children %}
     <section>
         <table class="centered">
-            <caption>Okręgi</caption>
+            <caption>{{ area_names_p|get:child_name }}</caption>
             <thead>
                 <tr>
-                    <th>Okręg</th>
-                    {% for stat, name in stats.items %}
+                    <th>{{ area_names|get:child_name }}</th>
+                    {% for stat in stats %}
                         {% if stat == 'people' or stat == 'valid' %}
                         <th class="not_small">
                         {% else %}
                         <th class="large_only">
                         {% endif %}
-                        {{ name }}</th>
+                        {{ stat_names|get:stat }}</th>
                     {% endfor %}
-                    <th>Głosy ważne</th>
                 </tr>
             </thead>
             <tbody>
             {% for subarea in area.children %}
                 <tr>
                     <td>
-                        <a href="{% url 'main:district' subarea.id %}" title="{{ subarea }}"> {{ subarea }} </a>
+                        <a href="{% with 'main:'|add:child_name as addr %} {% url addr subarea.pk %} {% endwith %}" title="{{ subarea }}"> {{ subarea.pk }} </a>
                     </td>
-                    {% for stat, name in stats.items %}
+                    {% for stat in stats %}
                         {% if stat == 'people' or stat == 'valid' %}
                         <td class="not_small">
                         {% else %}
@@ -103,12 +103,12 @@
                         {% endif %}
                         {{ subarea|getattr:stat }}</td>
                     {% endfor %}
-                <td>{{ area.cards }}</td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
     </section>
+    {% endif %}
     </main>
 </body>
 </html>

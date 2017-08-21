@@ -1,11 +1,14 @@
 from django.db import models
 
-from .dictionaries import candidates, stats
+from .dictionaries import *
 
 
 class Area(models.Model):
     class Meta:
         abstract = True
+
+    def __str__(self):
+        return "%s %s" % (area_names[type(self).__name__.lower()], self.pk)
 
     def children(self):
         return []
@@ -74,21 +77,31 @@ class Area(models.Model):
         return self.sum_attr("wilecki")
 
 
-class Voivodeship(Area):
+class Country(Area):
     name = models.CharField('Nazwa', max_length=32, primary_key=True)
 
     def __str__(self):
-        return "Województwo %s" % self.name
+        return "%s" % self.pk
+
+    def children(self):
+        return self.voivodeship_set.all()
+
+
+class Voivodeship(Area):
+    name = models.CharField('Nazwa', max_length=32, primary_key=True)
+    country = models.ForeignKey(Country,
+                                verbose_name=area_names['country'],
+                                on_delete=models.CASCADE)
+
 
     def children(self):
         return self.district_set.all()
 
 
 class District(Area):
-    voivodeship = models.ForeignKey(Voivodeship, verbose_name='Województwo', on_delete=models.CASCADE)
-
-    def __str__(self):
-        return "Okręg %s" % self.id
+    voivodeship = models.ForeignKey(Voivodeship,
+                                    verbose_name=area_names['voivodeship'],
+                                    on_delete=models.CASCADE)
 
     def children(self):
         return self.commune_set.all()
@@ -97,29 +110,29 @@ class District(Area):
 class Commune(Area):
     district = models.ForeignKey(District, verbose_name='Okręg', on_delete=models.CASCADE)
     name = models.CharField('Nazwa', max_length=255)
-    subareas = models.IntegerField(stats['subareas'])
-    people = models.IntegerField(stats['people'])
-    cards = models.IntegerField(stats['cards'])
-    invalid = models.IntegerField(stats['invalid'])
-    grabowski = models.IntegerField(candidates['grabowski'])
-    ikonowicz = models.IntegerField(candidates['ikonowicz'])
-    kalinowski = models.IntegerField(candidates['kalinowski'])
-    korwin = models.IntegerField(candidates['korwin'])
-    krzaklewski = models.IntegerField(candidates['krzaklewski'])
-    kwasniewski = models.IntegerField(candidates['kwasniewski'])
-    lepper = models.IntegerField(candidates['lepper'])
-    lopuszanski = models.IntegerField(candidates['lopuszanski'])
-    olechowski = models.IntegerField(candidates['olechowski'])
-    pawlowski = models.IntegerField(candidates['pawlowski'])
-    walesa = models.IntegerField(candidates['walesa'])
-    wilecki = models.IntegerField(candidates['wilecki'])
+    subareas = models.IntegerField(stat_names['subareas'])
+    people = models.IntegerField(stat_names['people'])
+    cards = models.IntegerField(stat_names['cards'])
+    invalid = models.IntegerField(stat_names['invalid'])
+    grabowski = models.IntegerField(candidate_names['grabowski'])
+    ikonowicz = models.IntegerField(candidate_names['ikonowicz'])
+    kalinowski = models.IntegerField(candidate_names['kalinowski'])
+    korwin = models.IntegerField(candidate_names['korwin'])
+    krzaklewski = models.IntegerField(candidate_names['krzaklewski'])
+    kwasniewski = models.IntegerField(candidate_names['kwasniewski'])
+    lepper = models.IntegerField(candidate_names['lepper'])
+    lopuszanski = models.IntegerField(candidate_names['lopuszanski'])
+    olechowski = models.IntegerField(candidate_names['olechowski'])
+    pawlowski = models.IntegerField(candidate_names['pawlowski'])
+    walesa = models.IntegerField(candidate_names['walesa'])
+    wilecki = models.IntegerField(candidate_names['wilecki'])
 
     def __str__(self):
         return "Gmina %s" % self.name
 
     def valid(self):
         attr_sum = 0
-        for candidate, _ in candidates.items():
+        for candidate in candidates:
             attr_sum += getattr(self, candidate)
         return attr_sum
 

@@ -1,5 +1,7 @@
 from django import template
 
+from main.dictionaries import area_names
+
 register = template.Library()
 
 
@@ -11,6 +13,6 @@ def getattribute(value, arg):
     return attr
 
 
-@register.filter(name='verbose_name')
-def verbose_name(value, arg):
-    return value._meta.get_field_by_name(arg)[0].verbose_name
+@register.filter(name='get')
+def get(dic, key):
+    return dic.get(key)

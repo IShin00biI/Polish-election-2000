@@ -1,6 +1,6 @@
 {% load static %}
 {% load main_filters %}
-{%  load mathfilters %}
+{% load mathfilters %}
 
 <!DOCTYPE html>
 <html lang="pl">
@@ -21,7 +21,7 @@
             <figure>
             <figcaption>Rozkład głosów</figcaption>
                 <div class="line_chart">
-                {% for cand, color in candidates.items %}
+                {% for cand, color in candidate_colors.items %}
                     <div style="background-color: {{ color }};
                         width: {{ area|getattr:cand|div:area.valid|mul:100 }}%"></div>
                 {% endfor %}
@@ -40,9 +40,9 @@
                 </tr>
             </thead>
             <tbody>
-            {% for stat, verbose in statistics.items %}
+            {% for stat, name in stats.items %}
                 <tr>
-                    <td>{{ verbose }}</td>
+                    <td>{{ name }}</td>
                     <td>{{ area|getattr:stat }}</td>
                 </tr>
             {% endfor %}
@@ -61,7 +61,7 @@
                 </tr>
             </thead>
             <tbody>
-            {% for cand, color in candidates.items %}
+            {% for cand, color in candidate_colors.items %}
                 <tr>
                     <td>{{ cand }}</td>
                     <td style="background-color: {{ color }}"></td>
@@ -78,13 +78,13 @@
             <thead>
                 <tr>
                     <th>Okręg</th>
-                    {% for stat, verbose in statistics.items %}
+                    {% for stat, name in stats.items %}
                         {% if stat == 'people' or stat == 'valid' %}
                         <th class="not_small">
                         {% else %}
                         <th class="large_only">
                         {% endif %}
-                        {{ verbose }}</th>
+                        {{ name }}</th>
                     {% endfor %}
                     <th>Głosy ważne</th>
                 </tr>
@@ -95,7 +95,7 @@
                     <td>
                         <a href="{% url 'main:district' subarea.id %}" title="{{ subarea }}"> {{ subarea }} </a>
                     </td>
-                    {% for stat, verbose in statistics.items %}
+                    {% for stat, name in stats.items %}
                         {% if stat == 'people' or stat == 'valid' %}
                         <td class="not_small">
                         {% else %}

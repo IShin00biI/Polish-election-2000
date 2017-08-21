@@ -2,32 +2,7 @@ from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse
 
 from .models import Voivodeship, District, Commune
-
-
-candidates = {
-    'grabowski': 'crimson',
-    'ikonowicz': 'blue',
-    'kalinowski': 'yellow',
-    'korwin': 'green',
-    'krzaklewski': 'purple',
-    'kwasniewski': 'pink',
-    'lepper': 'brown',
-    'lopuszanski': 'darkcyan',
-    'olechowski': 'blueviolet',
-    'pawlowski': 'greenyellow',
-    'walesa': 'fuchsia',
-    'wilecki': 'coral'
-}
-
-
-statistics = {
-    'subareas': 'Obwody',
-    'people': 'Uprawnieni',
-    'cards': 'Karty wydane',
-    'given': 'Głosy oddane',
-    'valid': 'Głosy ważne',
-    'invalid': 'Głosy nieważne'
-}
+from .dictionaries import stats, candidates, candidate_colors
 
 
 def login(request):
@@ -44,7 +19,8 @@ def index(request):
 def voivodeship(request, pk):
     voivodeship = get_object_or_404(Voivodeship, pk=pk)
     return render(request, 'main/voivodeship.html',
-                  {'area': voivodeship, 'candidates': candidates, 'statistics': statistics})
+                  {'area': voivodeship, 'candidates': candidates,
+                   'stats': stats, 'candidate_colors': candidate_colors})
 
 
 def district(request, pk):

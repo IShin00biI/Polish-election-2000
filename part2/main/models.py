@@ -1,19 +1,6 @@
 from django.db import models
 
-candidates = {
-    'grabowski': 'crimson',
-    'ikonowicz': 'blue',
-    'kalinowski': 'yellow',
-    'korwin': 'green',
-    'krzaklewski': 'purple',
-    'kwasniewski': 'pink',
-    'lepper': 'brown',
-    'lopuszanski': 'darkcyan',
-    'olechowski': 'blueviolet',
-    'pawlowski': 'greenyellow',
-    'walesa': 'fuchsia',
-    'wilecki': 'coral'
-}
+from .dictionaries import candidates, stats
 
 
 class Area(models.Model):
@@ -98,7 +85,7 @@ class Voivodeship(Area):
 
 
 class District(Area):
-    county = models.ForeignKey(Voivodeship, verbose_name='Województwo', on_delete=models.CASCADE)
+    voivodeship = models.ForeignKey(Voivodeship, verbose_name='Województwo', on_delete=models.CASCADE)
 
     def __str__(self):
         return "Okręg %s" % self.id
@@ -110,29 +97,29 @@ class District(Area):
 class Commune(Area):
     district = models.ForeignKey(District, verbose_name='Okręg', on_delete=models.CASCADE)
     name = models.CharField('Nazwa', max_length=255)
-    subareas = models.IntegerField('Obwody')
-    people = models.IntegerField('Uprawnieni')
-    cards = models.IntegerField('Karty wydane')
-    invalid = models.IntegerField('Głosy nieważne')
-    grabowski = models.IntegerField('Dariusz Maciej GRABOWSKI')
-    ikonowicz = models.IntegerField('Piotr IKONOWICZ')
-    kalinowski = models.IntegerField('Jarosław KALINOWSKI')
-    korwin = models.IntegerField('Janusz KORWIN-MIKKE')
-    krzaklewski = models.IntegerField('Marian KRZAKLEWSKI')
-    kwasniewski = models.IntegerField('Aleksander KWAŚNIEWSKI')
-    lepper = models.IntegerField('Andrzej LEPPER')
-    lopuszanski = models.IntegerField('Jan ŁOPUSZAŃSKI')
-    olechowski = models.IntegerField('Andrzej Marian OLECHOWSKI')
-    pawlowski = models.IntegerField('Bogdan PAWŁOWSKI')
-    walesa = models.IntegerField('Lech Wałęsa')
-    wilecki = models.IntegerField('Tadeusz Adam WILECKI')
+    subareas = models.IntegerField(stats['subareas'])
+    people = models.IntegerField(stats['people'])
+    cards = models.IntegerField(stats['cards'])
+    invalid = models.IntegerField(stats['invalid'])
+    grabowski = models.IntegerField(candidates['grabowski'])
+    ikonowicz = models.IntegerField(candidates['ikonowicz'])
+    kalinowski = models.IntegerField(candidates['kalinowski'])
+    korwin = models.IntegerField(candidates['korwin'])
+    krzaklewski = models.IntegerField(candidates['krzaklewski'])
+    kwasniewski = models.IntegerField(candidates['kwasniewski'])
+    lepper = models.IntegerField(candidates['lepper'])
+    lopuszanski = models.IntegerField(candidates['lopuszanski'])
+    olechowski = models.IntegerField(candidates['olechowski'])
+    pawlowski = models.IntegerField(candidates['pawlowski'])
+    walesa = models.IntegerField(candidates['walesa'])
+    wilecki = models.IntegerField(candidates['wilecki'])
 
     def __str__(self):
         return "Gmina %s" % self.name
 
     def valid(self):
         attr_sum = 0
-        for candidate in candidates:
+        for candidate, _ in candidates.items():
             attr_sum += getattr(self, candidate)
         return attr_sum
 

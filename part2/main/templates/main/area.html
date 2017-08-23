@@ -1,25 +1,19 @@
+{% extends 'main/base.html' %}
+
 {% load static %}
 {% load main_filters %}
 {% load mathfilters %}
 
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="author" content="Michał Naruniec">
-    <link rel="stylesheet" type="text/css" href="{% static 'main/style.css' %}">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% block head %}
     <title>{{ area }} - PKW2000</title>
     {% if area.pk == 'Polska' %}
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <script type="text/javascript" src="{% static 'main/voivodeship_map.js' %}"></script>
     {% endif %}
-</head>
-<body>
-    <header class="mainheader">
-        Wybory prezydenckie 2000
-    </header>
-    <main>
+{% endblock %}
+
+{% block main %}
+
     <header class="pageheader"> <h1>{{ area }}</h1></header>
     <section>
             <figure>
@@ -65,14 +59,29 @@
                 </tr>
             </thead>
             <tbody>
-            {% for cand in candidates %}
+            {% if commune_form and request.user.is_authenticated %}
+            <form method="POST">
+            {% csrf_token %}
+                {% for cand in candidates %}
+                <tr>
+                    <td><label for="{{ commune_form|getattr:cand|getattr:id_for_label }}">{{ candidate_names|get:cand }}</label></td>
+                    <td style="background-color: {{ candidate_colors|get:cand }}"></td>
+                    <td>{{ commune_form|getattr:cand }}</td>
+                    <td class="large_only">{{ area|getattr:cand|div:area.valid|mul:100|floatformat:2 }}%</td>
+                </tr>
+                {% endfor %}
+                <input type="submit">
+            </form>
+            {% else %}
+                {% for cand in candidates %}
                 <tr>
                     <td>{{ candidate_names|get:cand }}</td>
                     <td style="background-color: {{ candidate_colors|get:cand }}"></td>
                     <td>{{ area|getattr:cand }}</td>
                     <td class="large_only">{{ area|getattr:cand|div:area.valid|mul:100|floatformat:2 }}%</td>
                 </tr>
-            {% endfor %}
+                {% endfor %}
+            {% endif %}
             </tbody>
         </table>
     </section>
@@ -98,7 +107,7 @@
             {% for subarea in area.children %}
                 <tr>
                     <td>
-                        <a href="{% with 'main:'|add:child_name as addr %} {% url addr subarea.pk %} {% endwith %}" title="{{ subarea }}"> {{ subarea.pk }} </a>
+                        <a href="{% with 'main:'|add:child_name as addr %}{% url addr subarea.pk %}{% endwith %}" title="{{ subarea }}"> {{ subarea.pk }} </a>
                     </td>
                     {% for stat in stats %}
                         {% if stat == 'people' or stat == 'valid' %}
@@ -114,6 +123,4 @@
         </table>
     </section>
     {% endif %}
-    </main>
-</body>
-</html>
+{% endblock %}

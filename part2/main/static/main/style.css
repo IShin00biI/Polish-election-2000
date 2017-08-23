@@ -3,6 +3,23 @@ body {
     font-family: Arial, Verdana, sans-serif;
 }
 
+.logstripe {
+    text-align: right;
+    padding: 0px;
+    font-size: 0.3em;
+    font-weight: bold;
+    color: white;
+}
+
+.logstripe > a {
+    text-decoration: underline;
+}
+
+.errormsg {
+    color: crimson;
+    font-weight: bold;
+}
+
 header.mainheader {
     text-align: center;
     background-color: crimson;
@@ -14,6 +31,11 @@ header.mainheader {
 
 header.pageheader {
     margin:20px;
+}
+
+header a {
+    color:inherit;
+    text-decoration: inherit;
 }
 
 main {

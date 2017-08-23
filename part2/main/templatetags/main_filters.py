@@ -16,3 +16,8 @@ def getattribute(value, arg):
 @register.filter(name='get')
 def get(dic, key):
     return dic.get(key)
+
+
+@register.filter(name='getfield')
+def getfield(form, field):
+    return form.__getitem__(field)

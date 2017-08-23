@@ -63,14 +63,18 @@
             <form method="POST">
             {% csrf_token %}
                 {% for cand in candidates %}
+                {% with commune_form|getfield:cand as field %}
                 <tr>
-                    <td><label for="{{ commune_form|getattr:cand|getattr:id_for_label }}">{{ candidate_names|get:cand }}</label></td>
+                    <td><label for="{{ field.id_for_label }}">{{ candidate_names|get:cand }}</label></td>
                     <td style="background-color: {{ candidate_colors|get:cand }}"></td>
-                    <td>{{ commune_form|getattr:cand }}</td>
+                    <td>{{ field }}</td>
                     <td class="large_only">{{ area|getattr:cand|div:area.valid|mul:100|floatformat:2 }}%</td>
                 </tr>
+                {% endwith %}
                 {% endfor %}
-                <input type="submit">
+                <tr>
+                    <td><input type="submit" value="Zapisz"></td>
+                </tr>
             </form>
             {% else %}
                 {% for cand in candidates %}

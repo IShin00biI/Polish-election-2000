@@ -13,7 +13,13 @@
 {% endblock %}
 
 {% block main %}
-
+    <section>
+        <form method='get' action="{% url 'main:search' %}">
+            <label for="search">Szukaj gminy:</label>
+            <input type="text" name="search" id="search" required>
+            <input type="submit" value="Szukaj">
+        </form>
+    </section>
     <header class="pageheader"> <h1>{{ area }}</h1></header>
     <section>
             <figure>

@@ -28,6 +28,10 @@ def logout_view(request):
     return HttpResponseRedirect(reverse('main:index'))
 
 
+def search_view(request):
+    return HttpResponse("search")
+
+
 # area view abstract
 def area(request, pk, area_type, child_name, commune_form=None):
     area = get_object_or_404(area_type, pk=pk)

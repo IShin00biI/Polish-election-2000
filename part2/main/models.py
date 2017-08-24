@@ -104,3 +104,6 @@ class Commune(Area):
         if self.given() > self.cards or self.cards > self.people:
             raise ValidationError("The commune dataset is incorrect")
         super(Commune, self).clean()
+
+    def __str__(self):
+        return "Gmina %s" % self.name

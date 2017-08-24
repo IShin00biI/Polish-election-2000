@@ -13,7 +13,6 @@
 {% endblock %}
 
 {% block main %}
-
     {% if error_msg %}
     <section class="errormsg">
         {{ error_msg }}
@@ -27,7 +26,7 @@
         </form>
     </section>
     <header class="pageheader"> <h1>{{ area }}</h1></header>
-    {% with results|get:valid as all_valid %}
+    {% with results.valid as all_valid %}
     <section>
             <figure>
             <figcaption>Rozkład głosów</figcaption>
@@ -64,8 +63,7 @@
             {% endfor %}
             </tbody>
         </table>
-        {% if commune_form and request.user.is_authenticated %}
-        {% endif %}
+
         <table class="cand_table">
             <caption>
                 Wyniki kandydatów
@@ -86,7 +84,7 @@
                     <td><label for="{{ field.id_for_label }}">{{ candidate_names|get:cand }}</label></td>
                     <td style="background-color: {{ candidate_colors|get:cand }}"></td>
                     <td>{{ field }}</td>
-                    <td class="large_only">{{ results|get:cand|div:all_valid|mul:100 }}%</td>
+                    <td class="large_only">{{ results|get:cand|div:all_valid|mul:100|floatformat:2 }}%</td>
                 </tr>
                 {% endwith %}
                 {% endfor %}
@@ -99,7 +97,7 @@
                     <td>{{ candidate_names|get:cand }}</td>
                     <td style="background-color: {{ candidate_colors|get:cand }}"></td>
                     <td>{{ results|get:cand }}</td>
-                    <td class="large_only">{{ results|get:cand|div:all_valid|mul:100 }}%</td>
+                    <td class="large_only">{{ results|get:cand|div:all_valid|mul:100|floatformat:2 }}%</td>
                 </tr>
                 {% endfor %}
             {% endif %}
@@ -132,7 +130,9 @@
             {% for subarea in children %}
                 <tr>
                     <td>
-                        <a href="{% with 'main:'|add:child_name as addr %}{% url addr subarea.pk %}{% endwith %}" title="{{ subarea }}"> {{ subarea.pk }} </a>
+                        <a href="{% with 'main:'|add:child_name as addr %}
+                                    {% url addr subarea.pk %}
+                                 {% endwith %}" title="{{ subarea }}"> {{ subarea.pk }} </a>
                     </td>
                     {% for stat in stats %}
                         {% if stat == 'people' or stat == 'valid' %}

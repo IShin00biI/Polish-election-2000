@@ -40,15 +40,6 @@ def search_view(request):
     else:
         return HttpResponseRedirect(reverse('main:index'))
 
-'''
-# area view abstract
-def areaold(request, pk, area_type, child_name, commune_form=None, error_msg=None):
-    area = get_object_or_404(area_type, pk=pk)
-    return render(request, 'main/area.html',
-                 {'area': area, 'child_name': child_name,
-                  'commune_form': commune_form, 'error_msg': error_msg, **dictionaries})
-'''
-
 
 # area view abstract
 def area(request, area_class, pk, error_msg='', commune_form=None):
@@ -82,7 +73,8 @@ def area(request, area_class, pk, error_msg='', commune_form=None):
                     'children': children,
                     'child_name': area.child_name(),
                     'error_msg': error_msg,
-                    'commune_form': commune_form})
+                    'commune_form': commune_form,
+                    **dictionaries})
 
 
 def index(request):#(request):
@@ -106,12 +98,12 @@ def commune(request, pk):
                 commune_form.save()
                 return HttpResponseRedirect(reverse('main:commune', kwargs={'pk': pk}))
             else:
-                return area(request, pk,
-                            Commune, error_msg='Dane są niepoprawne!',
+                return area(request, Commune, pk,
+                            error_msg='Dane są niepoprawne!',
                             commune_form=commune_form)
         else:
             commune = get_object_or_404(Commune, pk=pk)
             commune_form = CommuneForm(instance=commune)
-            return area(request, pk, Commune, commune_form=commune_form)
+            return area(request, Commune, pk, commune_form=commune_form)
     else:
-        return area(request, pk, Commune)
+        return area(request, Commune, pk)

@@ -13,6 +13,12 @@
 {% endblock %}
 
 {% block main %}
+
+    {% if error_msg %}
+    <section class="errormsg">
+        {{ error_msg }}
+    </section>
+    {% endif %}
     <section>
         <form method='get' action="{% url 'main:search' %}">
             <label for="search">Szukaj gminy:</label>
@@ -50,19 +56,15 @@
             <tbody>
             {% for stat in stats %}
                 <tr>
-                    {% if commune_form and request.user.is_authenticated and stat in static_stats %}
-                        {% with commune_form|getfield:stat as field %}
-                            <td><label for="{{ field.id_for_label }}">{{ stat_names|get:stat }}</label></td>
-                            <td>{{ field }}</td>
-                        {% endwith %}
-                    {% else %}
+
                     <td>{{ stat_names|get:stat }}</td>
                     <td>{{ area|getattr:stat }}</td>
-                    {% endif %}
                 </tr>
             {% endfor %}
             </tbody>
         </table>
+        {% if commune_form and request.user.is_authenticated %}
+        {% endif %}
         <table class="cand_table">
             <caption>
                 Wyniki kandydatów

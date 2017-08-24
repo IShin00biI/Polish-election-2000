@@ -77,8 +77,8 @@ candidate_names = {
 candidate_colors = {
     'grabowski': 'crimson',
     'ikonowicz': 'blue',
-    'kalinowski': 'yellow',
-    'korwin': 'green',
+    'kalinowski': 'coral',
+    'korwin': 'yellow',
     'krzaklewski': 'purple',
     'kwasniewski': 'pink',
     'lepper': 'brown',
@@ -86,7 +86,7 @@ candidate_colors = {
     'olechowski': 'blueviolet',
     'pawlowski': 'greenyellow',
     'walesa': 'fuchsia',
-    'wilecki': 'coral'
+    'wilecki': 'green'
 }
 
 

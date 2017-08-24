@@ -19,11 +19,15 @@
         Wyszukiwana fraza: "{{ search }}"
     </section>
     <section>
+        {% if results %}
         Wyniki:
         <ul>
         {% for result in results %}
             <li><a href="{% url 'main:commune' result.pk %}" title="{{ result.pk }}"> {{ result }} ({{ result.pk }}) </a></li>
         {% endfor %}
         </ul>
+        {% else %}
+            Brak wyników
+        {% endif %}
     </section>
 {% endblock %}

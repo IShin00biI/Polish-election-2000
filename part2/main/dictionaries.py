@@ -5,12 +5,14 @@ area_names = {
     'commune': 'Gmina'
 }
 
+
 area_names_p = {
     'country': 'Kraje',
     'voivodeship': 'Województwa',
     'district': 'Okręgi',
     'commune': 'Gminy'
 }
+
 
 stats = [
     'subareas',
@@ -20,6 +22,15 @@ stats = [
     'valid',
     'invalid'
 ]
+
+
+static_stats = [
+    'subareas',
+    'people',
+    'cards',
+    'invalid'
+]
+
 
 stat_names = {
     'subareas': 'Obwody',
@@ -82,6 +93,7 @@ candidate_colors = {
 dictionaries = {
     'area_names': area_names,
     'area_names_p': area_names_p,
+    'static_stats': static_stats,
     'stats': stats,
     'stat_names': stat_names,
     'candidates': candidates,

@@ -31,7 +31,11 @@
                 {% endfor %}
                 </div>
             </figure>
-        </section>
+    </section>
+    {% if commune_form and request.user.is_authenticated %}
+    <form method="POST">
+    {% csrf_token %}
+    {% endif %}
     <section class="flex_container">
         <table>
             <caption>
@@ -46,8 +50,15 @@
             <tbody>
             {% for stat in stats %}
                 <tr>
+                    {% if commune_form and request.user.is_authenticated and stat in static_stats %}
+                        {% with commune_form|getfield:stat as field %}
+                            <td><label for="{{ field.id_for_label }}">{{ stat_names|get:stat }}</label></td>
+                            <td>{{ field }}</td>
+                        {% endwith %}
+                    {% else %}
                     <td>{{ stat_names|get:stat }}</td>
                     <td>{{ area|getattr:stat }}</td>
+                    {% endif %}
                 </tr>
             {% endfor %}
             </tbody>
@@ -66,8 +77,6 @@
             </thead>
             <tbody>
             {% if commune_form and request.user.is_authenticated %}
-            <form method="POST">
-            {% csrf_token %}
                 {% for cand in candidates %}
                 {% with commune_form|getfield:cand as field %}
                 <tr>
@@ -81,7 +90,6 @@
                 <tr>
                     <td><input type="submit" value="Zapisz"></td>
                 </tr>
-            </form>
             {% else %}
                 {% for cand in candidates %}
                 <tr>
@@ -95,6 +103,9 @@
             </tbody>
         </table>
     </section>
+    {% if commune_form and request.user.is_authenticated %}
+    </form>
+    {% endif %}
     {% if area.children %}
     <section>
         <div id="regions_div" class="centered"></div>

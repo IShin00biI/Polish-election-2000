@@ -27,13 +27,14 @@
         </form>
     </section>
     <header class="pageheader"> <h1>{{ area }}</h1></header>
+    {% with results|get:valid as all_valid %}
     <section>
             <figure>
             <figcaption>Rozkład głosów</figcaption>
                 <div class="line_chart">
                 {% for cand in candidates %}
                     <div style="background-color: {{ candidate_colors|get:cand }};
-                        width: {{ area|getattr:cand|div:area.valid|mul:100 }}%"></div>
+                        width: {{ results|get:cand|div:all_valid|mul:100 }}%"></div>
                 {% endfor %}
                 </div>
             </figure>
@@ -58,7 +59,7 @@
                 <tr>
 
                     <td>{{ stat_names|get:stat }}</td>
-                    <td>{{ area|getattr:stat }}</td>
+                    <td>{{ results|get:stat }}</td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -85,7 +86,7 @@
                     <td><label for="{{ field.id_for_label }}">{{ candidate_names|get:cand }}</label></td>
                     <td style="background-color: {{ candidate_colors|get:cand }}"></td>
                     <td>{{ field }}</td>
-                    <td class="large_only">{{ area|getattr:cand|div:area.valid|mul:100|floatformat:2 }}%</td>
+                    <td class="large_only">{{ results|get:cand|div:all_valid|mul:100 }}%</td>
                 </tr>
                 {% endwith %}
                 {% endfor %}
@@ -97,14 +98,15 @@
                 <tr>
                     <td>{{ candidate_names|get:cand }}</td>
                     <td style="background-color: {{ candidate_colors|get:cand }}"></td>
-                    <td>{{ area|getattr:cand }}</td>
-                    <td class="large_only">{{ area|getattr:cand|div:area.valid|mul:100|floatformat:2 }}%</td>
+                    <td>{{ results|get:cand }}</td>
+                    <td class="large_only">{{ results|get:cand|div:all_valid|mul:100 }}%</td>
                 </tr>
                 {% endfor %}
             {% endif %}
             </tbody>
         </table>
     </section>
+    {% endwith %}
     {% if commune_form and request.user.is_authenticated %}
     </form>
     {% endif %}
@@ -127,7 +129,7 @@
                 </tr>
             </thead>
             <tbody>
-            {% for subarea in area.children %}
+            {% for subarea in children %}
                 <tr>
                     <td>
                         <a href="{% with 'main:'|add:child_name as addr %}{% url addr subarea.pk %}{% endwith %}" title="{{ subarea }}"> {{ subarea.pk }} </a>

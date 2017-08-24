@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
-from django.db.models import Q
+from django.db.models import Q, Sum
 
 from .models import Country, Voivodeship, District, Commune
 from .dictionaries import *
@@ -40,25 +40,61 @@ def search_view(request):
     else:
         return HttpResponseRedirect(reverse('main:index'))
 
-
+'''
 # area view abstract
-def area(request, pk, area_type, child_name, commune_form=None, error_msg=None):
+def areaold(request, pk, area_type, child_name, commune_form=None, error_msg=None):
     area = get_object_or_404(area_type, pk=pk)
     return render(request, 'main/area.html',
                  {'area': area, 'child_name': child_name,
                   'commune_form': commune_form, 'error_msg': error_msg, **dictionaries})
+'''
 
 
-def index(request):
-    return area(request, 'Polska', Country, 'voivodeship')
+# area view abstract
+def area(request, area_class, pk, error_msg='', commune_form=None):
+    area = get_object_or_404(area_class, pk=pk)
+    children = area.children()
+    query_prefix = area.query_prefix()
+
+    query = {}
+    if children or query_prefix:
+        for field in candidates + static_stats:
+            query = {**query, field: Sum(query_prefix + field)}
+
+    if children:
+        results = children.aggregate(**query)
+    else:
+        results = {}
+        for field in candidates + static_stats:
+            results = { **results, field: getattr(area, field) }
+
+    results['valid'] = 0
+    for cand in candidates:
+        results['valid'] += results[cand]
+    results['given'] = results['valid'] + results['invalid']
+
+    if query_prefix:
+        children = children.annotate(**query)
+
+    return render(request, 'main/area.html',
+                  { 'area': area,
+                    'results': results,
+                    'children': children,
+                    'child_name': area.child_name(),
+                    'error_msg': error_msg,
+                    'commune_form': commune_form})
 
 
-def voivodeship(request, pk):
-    return area(request, pk, Voivodeship, 'district')
+def index(request):#(request):
+    return area(request, Country, 'Polska')
 
 
-def district(request, pk):
-    return area(request, pk, District, 'commune')
+def voivodeship(request, pk):#(request, pk):
+    return area(request, Voivodeship, pk)
+
+
+def district(request, pk):#(request, pk):
+    return area(request, District, pk)
 
 
 def commune(request, pk):
@@ -70,11 +106,12 @@ def commune(request, pk):
                 commune_form.save()
                 return HttpResponseRedirect(reverse('main:commune', kwargs={'pk': pk}))
             else:
-                return area(request, pk, Commune, 'commune',
-                            commune_form=commune_form, error_msg='Dane są niepoprawne!')
+                return area(request, pk,
+                            Commune, error_msg='Dane są niepoprawne!',
+                            commune_form=commune_form)
         else:
             commune = get_object_or_404(Commune, pk=pk)
             commune_form = CommuneForm(instance=commune)
-            return area(request, pk, Commune, 'commune', commune_form=commune_form)
+            return area(request, pk, Commune, commune_form=commune_form)
     else:
-        return area(request, pk, Commune, 'commune')
+        return area(request, pk, Commune)

@@ -66,8 +66,8 @@ class CommuneModelTests(TestCase):
 
     def test_dynamics_validation(self):
         com = Commune.objects.get(pk=7)
-        self.assertIs(com.valid(), 186)
-        self.assertIs(com.given(), 236)
+        self.assertEquals(com.valid(), 186)
+        self.assertEquals(com.given(), 236)
 
 
 class ViewTests(TestCase):
@@ -77,16 +77,20 @@ class ViewTests(TestCase):
 
     def test_correct_search(self):
         response = self.client.get(reverse('main:search'), {'search': 'Gmina Testowa'})
-        self.assertIs(response.status_code, 200)
+        self.assertEquals(response.status_code, 200)
         self.assertQuerysetEqual(response.context['results'], ['<Commune: Gmina Gmina Testowa>'])
 
     def test_no_arg_search(self):
         response = self.client.get(reverse('main:search'), follow=True)
-        self.assertIs(len(response.redirect_chain), 1)
+        self.assertEquals(len(response.redirect_chain), 1)
         self.assertEquals(response.redirect_chain[0][0], reverse('main:index'))
 
     def test_failed_login(self):
         response = self.client.post(reverse('main:login'), {'username': 'test-user', 'password': 'asdasd'}, follow=True)
-        self.assertIs(len(response.redirect_chain), 0)
+        self.assertEquals(len(response.redirect_chain), 0)
         self.assertEquals(response.context['username'], 'test-user')
         self.assertEquals(response.context['request'].user.is_authenticated(), False)
+
+    def test_non_existent_district(self):
+        response = self.client.get(reverse('main:district', kwargs={'pk': 9999}))
+        self.assertEquals(response.status_code, 404)

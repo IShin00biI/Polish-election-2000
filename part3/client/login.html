@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Michał Naruniec">
+    <link rel="stylesheet" type="text/css" href="/static/main/style.css">
+    <title>Logowanie - PKW2000</title>
+
+</head>
+<body>
+    <header class="mainheader">
+        <div class="logstripe">
+
+            <a href="/pkw/login/" title="login">Zaloguj</a>
+
+        </div>
+        <a href="/pkw/" title="index">Wybory prezydenckie 2000</a>
+    </header>
+    <main>
+
+    <header class="pageheader"> <h1>Logowanie</h1></header>
+
+    <section>
+        <form method="post" action=".">
+            <input type='hidden' name='csrfmiddlewaretoken' value='lD5lpEJEtn0cOVIUm7dbuSDjR0plAKHB5kpUaoJrguXz3kKHlQoiKtg55BzgKfRp' />
+            <label for="username">login: </label><input type="text" name="username" id="username" value="">
+            <br><br><label for="password">hasło: </label><input type="password" name="password" id="password" >
+            <br><br><input type="submit" value="Zaloguj">
+        </form>
+    </section>
+
+    </main>
+</body>
+</html>

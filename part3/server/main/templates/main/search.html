@@ -1,0 +1,33 @@
+{% extends 'main/base.html' %}
+
+{% load static %}
+
+{% block head %}
+    <title>Wyszukiwanie: {{ search }} - PKW2000</title>
+{% endblock %}
+
+{% block main %}
+    <section>
+        <form method='get' action="{% url 'main:search' %}">
+            <label for="search">Szukaj gminy:</label>
+            <input type="text" name="search" id="search" required>
+            <input type="submit" value="Szukaj">
+        </form>
+    </section>
+    <header class="pageheader"> <h1>Wyszukiwanie gmin</h1></header>
+    <section>
+        Wyszukiwana fraza: "{{ search }}"
+    </section>
+    <section>
+        {% if results %}
+        Wyniki:
+        <ul>
+        {% for result in results %}
+            <li><a href="{% url 'main:commune' result.pk %}" title="{{ result.pk }}"> {{ result }} ({{ result.pk }}) </a></li>
+        {% endfor %}
+        </ul>
+        {% else %}
+            Brak wyników
+        {% endif %}
+    </section>
+{% endblock %}

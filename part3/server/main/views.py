@@ -1,32 +1,27 @@
 from django.shortcuts import get_object_or_404, render
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.db.models import Q, Sum
+from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt
 
 from .models import Country, Voivodeship, District, Commune
 from .dictionaries import *
 from .forms import *
 
 
+@require_POST
+@csrf_exempt
 def login_view(request, username):
-    if request.user.is_authenticated:
-        return HttpResponseRedirect(reverse('main:index'))
+    user = authenticate(username=request.POST['username'], password=request.POST['password'])
+    if user is not None:
+        response = HttpResponse("OK")
     else:
-        if request.method == 'POST':
-            user = authenticate(username=request.POST['username'], password=request.POST['password'])
-            if user is not None:
-                login(request, user)
-                return HttpResponseRedirect(reverse('main:index'))
-            else:
-                return render(request, 'main/login.html', {'username': request.POST['username']})
-        else:
-            return render(request, 'main/login.html', {'username': ''})
+        response = HttpResponse("REFUSED")
 
-
-def logout_view(request):
-    logout(request)
-    return HttpResponseRedirect(reverse('main:index'))
+    response["Access-Control-Allow-Origin"] = "*"
+    return response
 
 
 def search_view(request):
@@ -47,45 +42,81 @@ def area(request, area_class, pk, error_msg='', commune_form=None):
     children = area.children()
     query_prefix = area.query_prefix()
 
-    query = {}
+    # preparing queries
+    cand_query = {}
+    stat_query = {}
     if children or query_prefix:
-        for field in candidates + static_stats:
-            query = {**query, field: Sum(query_prefix + field)}
+        for field in candidates:
+            cand_query[field] = Sum(query_prefix + field)
+        for field in static_stats:
+            stat_query[field] = Sum(query_prefix + field)
 
+    # fetching area results
     if children:
-        results = children.aggregate(**query)
+        cand_results = children.aggregate(**cand_query)
+        stat_results = children.aggregate(**stat_query)
     else:
-        results = {}
-        for field in candidates + static_stats:
-            results = { **results, field: getattr(area, field) }
+        cand_results = {}
+        stat_results = {}
+        for field in candidates:
+            cand_results[field] = getattr(area, field)
+        for field in static_stats:
+            stat_results[field] = getattr(area, field)
 
-    results['valid'] = 0
+    stat_results['valid'] = 0
     for cand in candidates:
-        results['valid'] += results[cand]
-    results['given'] = results['valid'] + results['invalid']
+        stat_results['valid'] += cand_results[cand]
+    stat_results['given'] = stat_results['valid'] + stat_results['invalid']
 
+    # swapping key names
+    for stat in stats:
+        stat_results[stat_names[stat]] = stat_results.pop(stat)
+
+    # fetching children results
     if query_prefix:
-        children = children.annotate(**query)
+        children = children.annotate(**stat_query).annotate(**cand_query)
 
-    return render(request, 'main/area.html',
-                  { 'area': area,
-                    'results': results,
-                    'children': children,
-                    'child_name': area.child_name(),
-                    'error_msg': error_msg,
-                    'commune_form': commune_form,
-                    **dictionaries})
+    # repacking children results to a dictionary
+    children_results = {}
+    for child in children:
+        child_results = {}
+        for stat in static_stats:
+            child_results[stat_names[stat]] = getattr(child,stat)
+
+        child_results[stat_names['valid']] = 0
+        for cand in candidates:
+            child_results[stat_names['valid']] += getattr(child, cand)
+        child_results[stat_names['given']] = \
+            child_results[stat_names['valid']] + child_results[stat_names['invalid']]
+        children_results[child.pk] = child_results
 
 
-def index(request):#(request):
+    response = JsonResponse ({
+        'area': area.__str__(),
+        'stats': stat_results,
+        'candidates': cand_results,
+        'children': children_results,
+        'child_type': area.child_name(),
+        'child_name': area_names[area.child_name()],
+        'child_name_plural': area_names_p[area.child_name()],
+        'stat_list': [ stat_names[stat] for stat in stats ],
+        'candidate_names': candidate_names,
+        #'error_msg': error_msg,
+        #'commune_form': commune_form
+    })
+    response["Access-Control-Allow-Origin"] = "*"
+    return response
+
+
+def index(request):
     return area(request, Country, 'Polska')
 
 
-def voivodeship(request, pk):#(request, pk):
+def voivodeship(request, pk):
     return area(request, Voivodeship, pk)
 
 
-def district(request, pk):#(request, pk):
+def district(request, pk):
     return area(request, District, pk)
 
 

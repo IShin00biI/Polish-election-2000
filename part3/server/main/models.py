@@ -32,6 +32,9 @@ class Area(models.Model):
     def child_name(self):
         return ''
 
+    def parent_name(self):
+        return ''
+
 
 class Country(Area):
     name = models.CharField('Nazwa', max_length=32, primary_key=True,
@@ -66,6 +69,9 @@ class Voivodeship(Area):
     def child_name(self):
         return 'district'
 
+    def parent_name(self):
+        return 'country'
+
 
 
 class District(Area):
@@ -78,6 +84,9 @@ class District(Area):
 
     def child_name(self):
         return 'commune'
+
+    def parent_name(self):
+        return 'voivodeship'
 
 
 class Commune(Area):
@@ -107,3 +116,6 @@ class Commune(Area):
 
     def __str__(self):
         return "Gmina %s" % self.name
+
+    def parent_name(self):
+        return 'district'

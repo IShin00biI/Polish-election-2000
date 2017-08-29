@@ -2,7 +2,8 @@ area_names = {
     'country': 'Kraj',
     'voivodeship': 'Województwo',
     'district': 'Okręg',
-    'commune': 'Gmina'
+    'commune': 'Gmina',
+    '': ''
 }
 
 
@@ -10,7 +11,8 @@ area_names_p = {
     'country': 'Kraje',
     'voivodeship': 'Województwa',
     'district': 'Okręgi',
-    'commune': 'Gminy'
+    'commune': 'Gminy',
+    '': ''
 }
 
 

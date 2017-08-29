@@ -5,24 +5,25 @@
     <meta name="author" content="Michał Naruniec">
     <link rel="stylesheet" type="text/css" href="./style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="common.js"></script>
     <script src="area.js"></script>
     <title>PKW2000</title>
 </head>
 <body>
     <header class="mainheader">
         <div class="logstripe">
-            <a href="./login/" title="login">Zaloguj</a>
+            <a href="./login.html" title="login">Zaloguj</a>
         </div>
-        <a class="index_link" title="index">Wybory prezydenckie 2000</a>
+        <a id="index_link" title="index">Wybory prezydenckie 2000</a>
     </header>
     <main>
     <section>
         <a href="./search.html" title="search">Szukaj</a>
     </section>
-    <header class="pageheader"> <h1>Województwo DOLNOŚLĄSKIE</h1></header>
+    <header class="pageheader"> <h1></h1></header>
 
-    <section class="flex_container">
-        <table>
+    <section class="flex_container" id="results_section">
+        <table id="stat_table">
             <caption>
                 Statystyki głosowania
             </caption>
@@ -33,14 +34,10 @@
                 </tr>
             </thead>
             <tbody>
-                <!--tr>
-                    <td>Obwody</td>
-                    <td>1793</td>
-                </tr-->
             </tbody>
         </table>
-
-        <table class="cand_table">
+        <form id='cand_form'>
+        <table id="cand_table">
             <caption>
                 Wyniki kandydatów
             </caption>
@@ -48,50 +45,22 @@
                 <tr>
                     <th>Kandydat</th>
                     <th>Otrzymane głosy</th>
-                    <th class="large_only">Procent</th>
+                    <th>Procent</th>
                 </tr>
             </thead>
             <tbody>
-                <!--tr>
-                    <td>Dariusz Maciej GRABOWSKI</td>
-                    <td>6906</td>
-                    <td class="large_only">0.51%</td>
-                </tr-->
             </tbody>
         </table>
+        </form>
     </section>
-    <section>
-        <div id="regions_div" class="centered"></div>
+    <section id="children_section">
         <table class="centered">
-            <caption id="child_name_plural">Okręgi</caption>
+            <caption id="child_name_plural"></caption>
             <thead>
                 <tr>
-                    <th id="child_name">Okręg</th>
-                    <th class="large_only">Obwody</th>
-                    <th class="not_small">Uprawnieni</th>
-                    <th class="large_only">Karty wydane</th>
-                    <th class="large_only">Głosy oddane</th>
-                    <th class="not_small">Głosy ważne</th>
-                    <th class="large_only">Głosy nieważne</th>
                 </tr>
             </thead>
             <tbody>
-                <!--tr>
-                    <td>
-                        <a href="/pkw/district/1" title="Okręg 1">1</a>
-                    </td>
-                    <td class="large_only">611</td>
-                        <td class="not_small">
-                        887897</td>
-                        <td class="large_only">
-                        550430</td>
-                        <td class="large_only">
-                        550054</td>
-                        <td class="not_small">
-                        545202</td>
-                        <td class="large_only">
-                        4852</td>
-                </tr-->
             </tbody>
         </table>
     </section>

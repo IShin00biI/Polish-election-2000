@@ -62,10 +62,6 @@ figcaption {
     font-weight: bold;
 }
 
-.cand_table {
-    max-width: 70%;
-}
-
 .centered {
     margin-left: auto;
     margin-right: auto;
@@ -86,43 +82,6 @@ section {
     justify-content: space-around;
 }
 
-.line_chart {
-    height: 30px;
-    margin: 0px;
-    margin-top: 10px;
-    padding: 0;
-    /*background-color: aquamarine;*/
-    display: flex;
-}
-
-.line_chart > div {
-    margin: 0;
-    padding: 0;
-    height: 100%
-}
-
-#regions_div {
-    max-height: 90%;
-    max-width: 90%
-}
-
-@media all and (max-width: 900px) {
-    .large_only {
-        display: none;
-    }
-
-}
-
-@media all and (max-width: 700px) {
-    .flex_container {
-        flex-direction: column;
-        align-items: center;
-    }
-    .large_only {
-        display: none;
-    }
-    .not_small {
-        display: none;
-    }
-
+a {
+    color: blue;
 }

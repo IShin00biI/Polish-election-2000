@@ -1,7 +1,7 @@
 from django.forms import ModelForm
 
-from main.models import Commune
-from main.dictionaries import *
+from .models import Commune
+from .dictionaries import *
 
 
 class CommuneForm(ModelForm):

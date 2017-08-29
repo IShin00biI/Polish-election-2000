@@ -12,7 +12,7 @@ pkw.refreshLogStripe = function(logoutCallback, callbackData) {
     var logStripe = $(".logstripe").empty();
     username = localStorage.getItem("pkw_username");
     if(username) {
-        logStripe.text(username + " ").append($("<a></a>").text("Wyloguj").click(function() {
+        logStripe.text(username + " ").append($("<a>").text("Wyloguj").click(function() {
             localStorage.removeItem("pkw_username");
             localStorage.removeItem("pkw_password");
             if(logoutCallback && callbackData)

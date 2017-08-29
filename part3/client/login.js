@@ -10,7 +10,7 @@ $(document).ready(function() {
         var password = $("#password").val();
 
         if(!username || !password) {
-            $(".errormsg").text("Proszę wypełnić oba pola!").show();
+            $(".errormsg").text("Wypełnij oba pola!").show();
             return;
         }
 

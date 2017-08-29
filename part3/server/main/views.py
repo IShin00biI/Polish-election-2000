@@ -18,7 +18,7 @@ def login_view(request, username):
     if user is not None:
         response = HttpResponse("OK")
     else:
-        response = HttpResponse("REFUSED")
+        response = HttpResponse("DENIED")
 
     response["Access-Control-Allow-Origin"] = "*"
     return response
@@ -119,22 +119,23 @@ def voivodeship(request, pk):
 def district(request, pk):
     return area(request, District, pk)
 
-
+@csrf_exempt
 def commune(request, pk):
-    if request.user.is_authenticated:
-        if request.method == 'POST':
+    if request.method == 'POST':
+        user = authenticate(username=request.POST['username'], password=request.POST['password'])
+        if user is not None:
             commune = get_object_or_404(Commune, pk=pk)
             commune_form = CommuneForm(request.POST, instance=commune)
             if commune_form.is_valid():
                 commune_form.save()
-                return HttpResponseRedirect(reverse('main:commune', kwargs={'pk': pk}))
+                response = HttpResponse("OK")
             else:
-                return area(request, Commune, pk,
-                            error_msg='Dane są niepoprawne!',
-                            commune_form=commune_form)
+                response = HttpResponse("INVALID")
         else:
-            commune = get_object_or_404(Commune, pk=pk)
-            commune_form = CommuneForm(instance=commune)
-            return area(request, Commune, pk, commune_form=commune_form)
+            response = HttpResponse("DENIED")
+
+        response["Access-Control-Allow-Origin"] = "*"
+        return response
+
     else:
         return area(request, Commune, pk)

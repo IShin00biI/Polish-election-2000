@@ -31,13 +31,23 @@ def search_view(request):
             results = Commune.objects.filter(Q(name__icontains=phrase) | Q(id=phrase))
         else:
             results = Commune.objects.filter(name__icontains=phrase)
-        return render(request, 'main/search.html', {'results': results, 'search': phrase})
+
+        result_dict = {}
+        for result in results:
+            result_dict[result.pk] = result.__str__()
+
+        response = JsonResponse(result_dict)
+
     else:
-        return HttpResponseRedirect(reverse('main:index'))
+        response = HttpResponse("INVALID")
+        response['status'] = 400
+
+    response["Access-Control-Allow-Origin"] = "*"
+    return response
 
 
 # area view abstract
-def area(request, area_class, pk, error_msg='', commune_form=None):
+def area(request, area_class, pk):
     area = get_object_or_404(area_class, pk=pk)
     children = area.children()
     query_prefix = area.query_prefix()
@@ -90,7 +100,6 @@ def area(request, area_class, pk, error_msg='', commune_form=None):
             child_results[stat_names['valid']] + child_results[stat_names['invalid']]
         children_results[child.pk] = child_results
 
-
     response = JsonResponse ({
         'area': area.__str__(),
         'stats': stat_results,
@@ -101,8 +110,9 @@ def area(request, area_class, pk, error_msg='', commune_form=None):
         'child_name_plural': area_names_p[area.child_name()],
         'stat_list': [ stat_names[stat] for stat in stats ],
         'candidate_names': candidate_names,
-        #'error_msg': error_msg,
-        #'commune_form': commune_form
+        'parent_type': area.parent_name(),
+        'parent': (area.parent().pk if area.parent() else ''),
+        'parent_name_full': (area.parent().__str__() if area.parent() else '')
     })
     response["Access-Control-Allow-Origin"] = "*"
     return response
@@ -119,6 +129,7 @@ def voivodeship(request, pk):
 def district(request, pk):
     return area(request, District, pk)
 
+
 @csrf_exempt
 def commune(request, pk):
     if request.method == 'POST':
@@ -131,8 +142,10 @@ def commune(request, pk):
                 response = HttpResponse("OK")
             else:
                 response = HttpResponse("INVALID")
+                response['status'] = 400
         else:
             response = HttpResponse("DENIED")
+            response['status'] = 401
 
         response["Access-Control-Allow-Origin"] = "*"
         return response

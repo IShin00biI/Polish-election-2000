@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-    function getSubmitFunction(areaType, pk) {
+    function createSubmitFunction(areaType, pk) {
         return function(e) {
             e.preventDefault();
             var username = localStorage.getItem("pkw_username");
@@ -19,7 +19,7 @@ $(document).ready(function() {
                     serializedForm,
                     function(result) {
                         if(result === "OK") {
-                            makeAreaGetter(areaType, pk)();
+                            createAreaLoader(areaType, pk)();
                             alert("OK");
                         }
                         else if(result === "DENIED")
@@ -37,12 +37,22 @@ $(document).ready(function() {
     function loadArea(data, areaType, pk) {
         pkw.refreshLogStripe(loadArea, data);
         data = JSON.parse(data);
-        $("tbody,#child_name,#child_name_plural,title,.pageheader > h1,#children_section thead tr,.errormsg").empty();
+
+        var cand, child;
+
+        $("tbody,#child_name,#child_name_plural,title,.pageheader > h1,.pageheader a," +
+            "#children_section thead tr,.errormsg,title").empty();
         $(".errormsg").hide();
+        $("title").text(data.area + " - PKW2000");
         $(".pageheader > h1").text(data.area);
         $("#child_name_plural").text(data.child_name_plural);
+        $("#refresh").unbind("click").click(createAreaLoader(areaType, pk));
 
-        var cand = null;
+        if(data.parent && data.parent_type) {
+            $(".pageheader a").unbind("click")
+                .click(createAreaLoader(data.parent_type, data.parent))
+                .text(data.parent_name_full);
+        }
 
         $.each(data.stat_list, function(i, stat) {
             if(data.stats.hasOwnProperty(stat)) {
@@ -70,12 +80,14 @@ $(document).ready(function() {
                         .append($("<td>")
                             .html(
                                 enableForm
-                                    ? '<input type="number" name="' + cand + '" value="' + data.candidates[cand] + '" required>'
+                                    ? '<input type="number" name="'
+                                        + cand + '" value="' + data.candidates[cand] + '">'
                                     : data.candidates[cand]
                             )
                         )
                         .append($("<td>")
-                            .text(Math.round((data.candidates[cand] / data.stats["Głosy ważne"]) * 10000) / 100 + "%")
+                            .text(Math.round((data.candidates[cand]
+                                / data.stats["Głosy ważne"]) * 10000) / 100 + "%")
                         )
                     )
             }
@@ -87,7 +99,7 @@ $(document).ready(function() {
                     .append($("<td>")
                         .append($("<button>")
                             .text("Zapisz")
-                            .click(getSubmitFunction(areaType, pk))
+                            .click(createSubmitFunction(areaType, pk))
                         )
                     )
                 );
@@ -98,25 +110,27 @@ $(document).ready(function() {
             childrenSection.hide();
         else {
             childrenSection.show();
-            tableHead = childrenSection.find("thead tr");
+            var tableHead = childrenSection.find("thead tr");
             tableHead.append($("<th>").text(data.child_name));
 
             $.each(data.stat_list, function(i, stat) {
                 tableHead.append($("<th>").text(stat));
             });
 
-            tableBody = childrenSection.find("tbody");
+            var tableBody = childrenSection.find("tbody");
             for(child in data.children) {
-                tableBody.append($("<tr>")
-                    .append($("<td>")
-                        .append($("<a>")
-                            .click(makeAreaGetter(data.child_type, child))
-                            .text(child)
+                if(data.children.hasOwnProperty(child)) {
+                    tableBody.append($("<tr>")
+                        .append($("<td>")
+                            .append($("<a>")
+                                .click(createAreaLoader(data.child_type, child))
+                                .text(child)
+                            )
                         )
-                    )
-                );
+                    );
+                }
 
-                tableRow = tableBody.find("tr:last");
+                var tableRow = tableBody.find("tr:last");
                 $.each(data.stat_list, function(i, stat) {
                     tableRow.append($("<td>").text(data.children[child][stat]));
                 });
@@ -124,7 +138,7 @@ $(document).ready(function() {
         }
     }
 
-    function makeAreaGetter(areaType, pk) {
+    function createAreaLoader(areaType, pk) {
         if(!areaType || !pk) areaType = pk = '';
         else if(areaType.charAt(areaType.length - 1) !== "/") areaType += "/";
         return function() {
@@ -135,14 +149,33 @@ $(document).ready(function() {
         }
     }
 
+    function parseParameters() {
+        var searchString = window.location.search.substring(1);
+        var params = searchString.split("&");
+        var i, pair;
+        var result = {};
+
+        for (i=0; i<params.length; i++) {
+            pair = params[i].split("=");
+            result[pair[0]] = pair[1];
+        }
+        return result;
+    }
+
     pkw.setUpErrors();
 
-    $("#index_link").click(makeAreaGetter());
+    $("#index_link").click(createAreaLoader());
 
     var oldData = localStorage.getItem("pkw_area");
     if(oldData) {
         loadArea(oldData);
     }
 
-    makeAreaGetter()();
+    var parameters = parseParameters();
+
+    if(parameters.areatype && parameters.pk)
+        createAreaLoader(parameters.areatype, parameters.pk)();
+    else
+        createAreaLoader()();
+
 });

@@ -1,12 +1,14 @@
 window.pkw = window.pkw || {};
 
+pkw.serverAddr = "http://localhost:8000/pkw/";
+
 pkw.setUpErrors = function() {
-    $(document).ajaxError(function () {
-        alert("An error occurred!");
+    $(document).ajaxError(function (event, jqxhr, settings, thrownError) {
+        alert("Wystąpił błąd w komunikacji z serwerem!" +
+            "\nKod: " + jqxhr.status +
+            "\nBłąd: " + thrownError);
     });
 };
-
-pkw.serverAddr = "http://localhost:8000/pkw/";
 
 pkw.refreshLogStripe = function(logoutCallback, callbackData) {
     var logStripe = $(".logstripe").empty();

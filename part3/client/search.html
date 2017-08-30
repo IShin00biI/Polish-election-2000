@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Michał Naruniec">
+    <link rel="stylesheet" type="text/css" href="./style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="common.js"></script>
+    <script src="search.js"></script>
+    <title>Wyszukiwanie - PKW2000</title>
+
+</head>
+<body>
+    <header class="mainheader">
+        <div class="logstripe">
+            <a href="./login.html" title="login">Zaloguj</a>
+        </div>
+        <a href="./area.html" title="index">Wybory prezydenckie 2000</a>
+    </header>
+    <main>
+        <header class="pageheader"> <h1>Wyszukiwanie gmin</h1></header>
+    <section>
+        Szukaj gminy:
+        <input type="text" name="search" id="search_input">
+        <button id="search_button">Szukaj</button>
+    </section>
+    <section id="query_display" style="display: none">
+        Wyszukiwana fraza: "<span></span>"
+    </section>
+    <section id="results" style="display: none"></section>
+    </main>
+</body>
+</html>

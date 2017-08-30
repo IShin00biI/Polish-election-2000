@@ -3,14 +3,14 @@ $(document).ready(function() {
 
     pkw.setUpErrors();
 
-    pkw.refreshLogStripe();
+    pkw.refreshLogStripe(null, null, true);
 
     $("#login_button").click(function() {
         var username = $("#username").val();
         var password = $("#password").val();
 
         if(!username || !password) {
-            $(".errormsg").text("Wypełnij oba pola!").show();
+            alert("Wypełnij oba pola!");
             return;
         }
 
@@ -25,7 +25,7 @@ $(document).ready(function() {
                     window.open("./area.html","_self")
                 }
                 else
-                    $(".errormsg").text("Podano nieprawidłowe dane logowania!").show();
+                    alert("Podano nieprawidłowe dane!");
             });
     });
 });

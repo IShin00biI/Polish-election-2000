@@ -78,18 +78,6 @@ class ViewTests(TestCase):
     def test_correct_search(self):
         response = self.client.get(reverse('main:search'), {'search': 'Gmina Testowa'})
         self.assertEquals(response.status_code, 200)
-        self.assertQuerysetEqual(response.context['results'], ['<Commune: Gmina Gmina Testowa>'])
-
-    def test_no_arg_search(self):
-        response = self.client.get(reverse('main:search'), follow=True)
-        self.assertEquals(len(response.redirect_chain), 1)
-        self.assertEquals(response.redirect_chain[0][0], reverse('main:index'))
-
-    def test_failed_login(self):
-        response = self.client.post(reverse('main:login'), {'username': 'test-user', 'password': 'asdasd'}, follow=True)
-        self.assertEquals(len(response.redirect_chain), 0)
-        self.assertEquals(response.context['username'], 'test-user')
-        self.assertEquals(response.context['request'].user.is_authenticated(), False)
 
     def test_non_existent_district(self):
         response = self.client.get(reverse('main:district', kwargs={'pk': 9999}))

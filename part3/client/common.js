@@ -10,7 +10,7 @@ pkw.setUpErrors = function() {
     });
 };
 
-pkw.refreshLogStripe = function(logoutCallback, callbackData) {
+pkw.refreshLogStripe = function(logoutCallback, callbackData, recursive) {
     var logStripe = $(".logstripe").empty();
     username = localStorage.getItem("pkw_username");
     if(username) {
@@ -18,7 +18,10 @@ pkw.refreshLogStripe = function(logoutCallback, callbackData) {
             localStorage.removeItem("pkw_username");
             localStorage.removeItem("pkw_password");
             if(logoutCallback && callbackData)
-                logoutCallback(callbackData)
+                logoutCallback(callbackData);
+
+            // Should pressing "logout" refresh stripe?
+            if(recursive) pkw.refreshLogStripe(logoutCallback, callbackData, true);
         }));
     }
     else

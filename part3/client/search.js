@@ -21,7 +21,7 @@ $(document).ready(function() {
 
     pkw.setUpErrors();
 
-    pkw.refreshLogStripe();
+    pkw.refreshLogStripe(null, null, true);
 
     $("#search_button").click(function(e) {
         e.preventDefault();

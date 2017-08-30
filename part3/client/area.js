@@ -9,7 +9,7 @@ $(document).ready(function() {
                 var serializedForm = $("#cand_form").serialize();
                 serializedForm += "&username=" + username + "&password=" + password;
                 if(serializedForm.search("=&") !== -1) {
-                    $(".errormsg").show().text("Wypełnij wszystkie pola!");
+                    alert("Wypełnij wszystkie pola!");
                     return;
                 }
 
@@ -23,13 +23,13 @@ $(document).ready(function() {
                             alert("OK");
                         }
                         else if(result === "DENIED")
-                            $(".errormsg").show().text("Odmowa dostępu! Zaloguj się ponownie.");
+                            alert("Odmowa dostępu! Zaloguj się ponownie.");
                         else
-                            $(".errormsg").show().text("Dane w formularzu są nieprawidłowe!");
+                            alert("Dane w formularzu są nieprawidłowe!");
                     });
             }
             else {
-                $(".errormsg").show().text("Błędne dane logowania! Zaloguj się ponownie.");
+                alert("Błędne dane logowania! Zaloguj się ponownie.");
             }
         };
     }
@@ -41,8 +41,7 @@ $(document).ready(function() {
         var cand, child;
 
         $("tbody,#child_name,#child_name_plural,title,.pageheader > h1,.pageheader a," +
-            "#children_section thead tr,.errormsg,title").empty();
-        $(".errormsg").hide();
+            "#children_section thead,title").empty();
         $("title").text(data.area + " - PKW2000");
         $(".pageheader > h1").text(data.area);
         $("#child_name_plural").text(data.child_name_plural);
@@ -110,8 +109,12 @@ $(document).ready(function() {
             childrenSection.hide();
         else {
             childrenSection.show();
-            var tableHead = childrenSection.find("thead tr");
-            tableHead.append($("<th>").text(data.child_name));
+            var tableHead = childrenSection.find("thead");
+            tableHead = tableHead
+                .append($("<tr>")
+                    .append($("<th>")
+                        .text(data.child_name)))
+                .find("tr");
 
             $.each(data.stat_list, function(i, stat) {
                 tableHead.append($("<th>").text(stat));

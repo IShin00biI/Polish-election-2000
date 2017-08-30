@@ -1,7 +1,6 @@
 from django.shortcuts import get_object_or_404, render
-from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
-from django.urls import reverse
-from django.contrib.auth import authenticate, login, logout
+from django.http import JsonResponse, HttpResponse
+from django.contrib.auth import authenticate
 from django.db.models import Q, Sum
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt

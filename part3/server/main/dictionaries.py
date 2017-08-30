@@ -76,22 +76,6 @@ candidate_names = {
 }
 
 
-candidate_colors = {
-    'grabowski': 'crimson',
-    'ikonowicz': 'blue',
-    'kalinowski': 'coral',
-    'korwin': 'yellow',
-    'krzaklewski': 'purple',
-    'kwasniewski': 'pink',
-    'lepper': 'brown',
-    'lopuszanski': 'darkcyan',
-    'olechowski': 'blueviolet',
-    'pawlowski': 'greenyellow',
-    'walesa': 'fuchsia',
-    'wilecki': 'green'
-}
-
-
 dictionaries = {
     'area_names': area_names,
     'area_names_p': area_names_p,
@@ -100,5 +84,4 @@ dictionaries = {
     'stat_names': stat_names,
     'candidates': candidates,
     'candidate_names': candidate_names,
-    'candidate_colors': candidate_colors
 }

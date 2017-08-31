@@ -25,9 +25,11 @@ class Area(models.Model):
         for candidate in candidates:
             attr_sum += getattr(self, candidate)
         return attr_sum
+    valid.short_description = stat_names['valid']
 
     def given(self):
         return self.valid() + self.invalid
+    given.short_description = stat_names['given']
 
     def child_name(self):
         return ''

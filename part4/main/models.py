@@ -1,6 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.core. validators import MinValueValidator, RegexValidator
+from django.db.models import Q
 
 from .dictionaries import *
 
@@ -23,12 +24,20 @@ class Area(models.Model):
     def valid(self):
         attr_sum = 0
         for candidate in candidates:
-            attr_sum += getattr(self, candidate)
+            temp = getattr(self, candidate)
+            if not temp:
+                temp = 0
+            attr_sum += temp
         return attr_sum
+
     valid.short_description = stat_names['valid']
 
     def given(self):
-        return self.valid() + self.invalid
+        temp = self.invalid
+        if not temp:
+            temp = 0
+        return self.valid() + temp
+
     given.short_description = stat_names['given']
 
     def child_name(self):

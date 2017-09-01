@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404, render
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.db.models import Q, Sum
@@ -77,15 +77,15 @@ def area(request, area_class, pk, error_msg='', commune_form=None):
                     **dictionaries})
 
 
-def index(request):#(request):
+def index(request):
     return area(request, Country, 'Polska')
 
 
-def voivodeship(request, pk):#(request, pk):
+def voivodeship(request, pk):
     return area(request, Voivodeship, pk)
 
 
-def district(request, pk):#(request, pk):
+def district(request, pk):
     return area(request, District, pk)
 
 

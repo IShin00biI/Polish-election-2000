@@ -109,8 +109,10 @@
     </form>
     {% endif %}
     {% if area.children %}
-    <section>
+    <section id="children_section">
+        {% if area.pk == 'Polska' %}
         <div id="regions_div" class="centered"></div>
+        {% endif %}
         <table class="centered">
             <caption>{{ area_names_p|get:child_name }}</caption>
             <thead>

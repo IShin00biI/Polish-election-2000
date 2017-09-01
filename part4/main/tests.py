@@ -145,7 +145,7 @@ class SeleniumTests(StaticLiveServerTestCase):
         self.find_when_ready(By.XPATH, '//input[@value="Zaloguj"]').click()
 
         # go to smallest area (commune)
-        while self.find_when_ready(By.ID, 'children_section'):
+        while self.wd.find_elements_by_id('children_section'):
             self.find_when_ready(By.CSS_SELECTOR, '#children_section a', True)[0].click()
 
         # check old data
